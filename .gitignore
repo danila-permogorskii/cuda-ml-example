@@ -1,0 +1,63 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# CMake build directories
+build/
+cmake-build-*/
+
+# CLion files
+.idea/
+
+# VS Code files
+.vscode/
+
+# CUDA specific
+*.i
+*.ii
+*.gpu
+*.ptx
+*.cubin
+*.fatbin
+
+# Windows specific
+Desktop.ini
+Thumbs.db
+ehthumbs.db
+
+# macOS specific
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
