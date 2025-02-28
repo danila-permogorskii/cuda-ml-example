@@ -26,8 +26,8 @@ set(CMAKE_CUDA_ARCHITECTURES "86")
 # Define the project
 project(cuda_ml_example LANGUAGES CUDA CXX)
 
-# Set C++ standard
-set(CMAKE_CXX_STANDARD 14)
+# Set C++ standard to C++17 for filesystem support
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Set the CUDA standard
@@ -75,16 +75,19 @@ set(TEXT_NEURAL_NETWORK_SOURCES
 add_executable(vector_addition src/vector_addition.cu)
 add_executable(neural_network ${NEURAL_NETWORK_SOURCES} src/main.cu)
 add_executable(text_classification ${TEXT_NEURAL_NETWORK_SOURCES} examples/text_classification_demo.cu)
+add_executable(text_classification_app ${TEXT_NEURAL_NETWORK_SOURCES} examples/text_classification_app.cu)
 
 # Set properties for CUDA
 set_target_properties(vector_addition PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 set_target_properties(neural_network PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 set_target_properties(text_classification PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
+set_target_properties(text_classification_app PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 
 # Link libraries
 target_link_libraries(vector_addition CUDA::cudart)
 target_link_libraries(neural_network CUDA::cudart CUDA::curand)
 target_link_libraries(text_classification CUDA::cudart CUDA::curand)
+target_link_libraries(text_classification_app CUDA::cudart CUDA::curand)
 
 # Create directories for models and data if they don't exist
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/models)
