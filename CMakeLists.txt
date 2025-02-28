@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.18)
 
+# Set cmake policy for CUDA integration
+# This addresses the CMP0146 warning by explicitly using the new approach
+if(POLICY CMP0146)
+  cmake_policy(SET CMP0146 NEW)
+endif()
+
 # Set the C++ compiler explicitly - adjust path for Windows
 # Windows paths use backslashes and include Visual Studio compiler
 if(WIN32)
@@ -30,9 +36,8 @@ set(CMAKE_CUDA_STANDARD 17)
 # Suppress CUDA warnings
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -diag-suppress=541")
 
-# Find CUDA package
-find_package(CUDA REQUIRED)
-include_directories(${CUDA_INCLUDE_DIRS})
+# Modern CUDA integration - no need for find_package(CUDA)
+# Instead, CMake handles CUDA through the LANGUAGES setting in project()
 
 # Add debugging flag for CUDA in Debug mode
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -55,11 +60,9 @@ set_target_properties(vector_addition PROPERTIES
     CUDA_SEPARABLE_COMPILATION ON
 )
 
-# Link libraries
-target_link_libraries(vector_addition ${CUDA_LIBRARIES})
+# In modern CMake CUDA integration, we use CUDA::cudart instead of ${CUDA_LIBRARIES}
+target_link_libraries(vector_addition CUDA::cudart)
 
 # Print some information for debugging
-message(STATUS "CUDA_INCLUDE_DIRS: ${CUDA_INCLUDE_DIRS}")
-message(STATUS "CUDA_LIBRARIES: ${CUDA_LIBRARIES}")
 message(STATUS "CMAKE_CUDA_ARCHITECTURES: ${CMAKE_CUDA_ARCHITECTURES}")
 message(STATUS "CMAKE_CUDA_COMPILER: ${CMAKE_CUDA_COMPILER}")
