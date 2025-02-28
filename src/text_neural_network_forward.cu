@@ -1,5 +1,6 @@
 #include "../include/text_neural_network.h"
 #include "../include/text_neural_network_kernels.cuh"
+#include "../include/text_preprocessing.h"  // Added for tokenize function
 #include <iostream>
 
 // Forward pass for text neural network
