@@ -1,5 +1,6 @@
 #include "../include/text_neural_network.h"
 #include "../include/text_neural_network_kernels.cuh"
+#include "../include/text_preprocessing.h"  // Added for buildVocabulary and tokenize functions
 #include <iostream>
 #include <algorithm>  // For std::random_shuffle
 #include <cstring>   // For std::memset
