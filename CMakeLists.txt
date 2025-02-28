@@ -49,6 +49,9 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
     set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -O3")
 endif()
 
+# Create example directory if it doesn't exist
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/examples)
+
 # Add include directories for header files
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
@@ -58,17 +61,34 @@ set(NEURAL_NETWORK_SOURCES
     src/neural_network_kernels.cu
 )
 
+# List of source files for text neural network
+set(TEXT_NEURAL_NETWORK_SOURCES
+    src/text_neural_network.cu
+    src/text_neural_network_kernels.cu
+    src/text_neural_network_forward.cu
+    src/text_neural_network_backward.cu
+    src/text_preprocessing.cu
+    src/text_neural_network_utils.cu
+)
+
 # Add executables
 add_executable(vector_addition src/vector_addition.cu)
 add_executable(neural_network ${NEURAL_NETWORK_SOURCES} src/main.cu)
+add_executable(text_classification ${TEXT_NEURAL_NETWORK_SOURCES} examples/text_classification_demo.cu)
 
 # Set properties for CUDA
 set_target_properties(vector_addition PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 set_target_properties(neural_network PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
+set_target_properties(text_classification PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 
 # Link libraries
 target_link_libraries(vector_addition CUDA::cudart)
 target_link_libraries(neural_network CUDA::cudart CUDA::curand)
+target_link_libraries(text_classification CUDA::cudart CUDA::curand)
+
+# Create directories for models and data if they don't exist
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/models)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/data)
 
 # Print some information for debugging
 message(STATUS "CMAKE_CUDA_ARCHITECTURES: ${CMAKE_CUDA_ARCHITECTURES}")
