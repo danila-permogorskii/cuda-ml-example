@@ -1,20 +1,7 @@
 #include "../include/neural_network.h"
+#include "../include/neural_network_kernels.cuh"
 #include <math.h>
 #include <time.h>
-
-// Function declarations for CUDA kernels (defined in neural_network_kernels.cu)
-extern "C" {
-    __global__ void matrixMultiply(const float* A, const float* B, float* C, int m, int n, int k);
-    __global__ void addBiasToMatrix(float* A, const float* bias, int m, int n);
-    __global__ void reluActivation(float* A, int size);
-    __global__ void reluDerivative(const float* A, float* dA, int size);
-    __global__ void matrixTranspose(const float* A, float* B, int rows, int cols);
-    __global__ void elementWiseMultiply(const float* A, const float* B, float* C, int size);
-    __global__ void updateWeights(float* W, const float* dW, float learning_rate, int size);
-    __global__ void initializeWeights(float* W, int fan_in, int fan_out, unsigned long seed);
-    __global__ void computeMSELoss(const float* predictions, const float* targets, float* loss, int size);
-    __global__ void softmaxActivation(float* input, int batch_size, int num_classes);
-}
 
 // Allocate memory for neural network parameters
 void allocateNeuralNetwork(NeuralNetwork* nn) {
