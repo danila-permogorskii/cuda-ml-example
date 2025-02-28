@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <random>
 #include <sstream>
 #include <limits>
 #include <filesystem>
@@ -82,7 +83,7 @@ void trainModelOption(TextNeuralNetwork* nn) {
     for (size_t i = 0; i < indices.size(); ++i) {
         indices[i] = i;
     }
-    std::shuffle(indices.begin(), indices.end(), std::default_random_engine(seed));
+    std::shuffle(indices.begin(), indices.end(), std::mt19937(seed));
     
     // Split into train and test sets
     for (size_t i = 0; i < indices.size(); ++i) {
@@ -123,7 +124,7 @@ void trainModelOption(TextNeuralNetwork* nn) {
     int* h_batch_labels = new int[BATCH_SIZE];
     
     std::vector<float> allPredictions;
-    std::vector<int> allLabels;
+    std::vector<int> evaluationLabels;
     
     // Process test data in batches
     int numBatches = (testSize + BATCH_SIZE - 1) / BATCH_SIZE;
@@ -165,13 +166,13 @@ void trainModelOption(TextNeuralNetwork* nn) {
             for (int j = 0; j < NUM_CLASSES; j++) {
                 allPredictions.push_back(h_predictions[i * NUM_CLASSES + j]);
             }
-            allLabels.push_back(h_batch_labels[i]);
+            evaluationLabels.push_back(h_batch_labels[i]);
         }
     }
     
     // Print performance metrics
-    printMetrics(allPredictions.data(), allLabels.data(), allLabels.size());
-    printConfusionMatrix(allPredictions.data(), allLabels.data(), allLabels.size());
+    printMetrics(allPredictions.data(), evaluationLabels.data(), evaluationLabels.size());
+    printConfusionMatrix(allPredictions.data(), evaluationLabels.data(), evaluationLabels.size());
     
     // Clean up
     delete[] h_text_indices;
