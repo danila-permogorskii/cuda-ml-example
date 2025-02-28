@@ -298,9 +298,13 @@ void backwardPass(NeuralNetwork* nn, const float* d_input, const float* d_target
     // dW1 = X^T * dZ1
     float* d_input_T;
     CHECK_CUDA_ERROR(cudaMalloc(&d_input_T, BATCH_SIZE * INPUT_SIZE * sizeof(float)));
-    matrixTranspose<<<gridDim(blockDim, (INPUT_SIZE + blockDim.x - 1) / blockDim.x, 
-                          (BATCH_SIZE + blockDim.y - 1) / blockDim.y), blockDim>>>(
-        d_input, d_input_T, BATCH_SIZE, INPUT_SIZE);
+    
+    // Define grid dimensions for input matrix transpose
+    dim3 gridDimInputT((INPUT_SIZE + blockDim.x - 1) / blockDim.x, 
+                      (BATCH_SIZE + blockDim.y - 1) / blockDim.y);
+    
+    // Transpose input matrix
+    matrixTranspose<<<gridDimInputT, blockDim>>>(d_input, d_input_T, BATCH_SIZE, INPUT_SIZE);
     
     matrixMultiply<<<gridDimW1, blockDim>>>(d_input_T, nn->d_dz1, nn->d_dW1,
                                            INPUT_SIZE, HIDDEN_SIZE, BATCH_SIZE);
