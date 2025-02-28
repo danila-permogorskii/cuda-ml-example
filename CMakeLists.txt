@@ -52,9 +52,15 @@ endif()
 # Add include directories for header files
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-# Add executables for each example
+# List of source files for neural network
+set(NEURAL_NETWORK_SOURCES
+    src/neural_network.cu
+    src/neural_network_kernels.cu
+)
+
+# Add executables
 add_executable(vector_addition src/vector_addition.cu)
-add_executable(neural_network src/neural_network.cu)
+add_executable(neural_network ${NEURAL_NETWORK_SOURCES} src/main.cu)
 
 # Set properties for CUDA
 set_target_properties(vector_addition PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
