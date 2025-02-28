@@ -12,7 +12,10 @@ inline void checkCuda(cudaError_t result, const char *file, int line) {
     }
 }
 
+// Only define CHECK_CUDA_ERROR if not already defined elsewhere
+#ifndef CHECK_CUDA_ERROR
 #define CHECK_CUDA_ERROR(val) checkCuda((val), __FILE__, __LINE__)
+#endif
 
 // Get CUDA device properties and print them
 inline void printDeviceInfo() {
