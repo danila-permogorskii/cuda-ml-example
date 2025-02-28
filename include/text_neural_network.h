@@ -3,16 +3,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <cuda_runtime.h>
 #include <vector>
 #include <string>
 #include <unordered_map>
-#include <algorithm>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <random>
 
 // Error checking macro for CUDA calls
 #define CHECK_CUDA_ERROR(call) { \
@@ -76,19 +70,17 @@ struct TextNeuralNetwork {
     float* d_dembeddings;    // Device memory for embedding matrix gradient [vocabSize x embeddingDim]
 };
 
-// Function declarations for text preprocessing
-void buildVocabulary(TextNeuralNetwork* nn, const std::vector<std::string>& texts);
-std::vector<std::string> tokenize(const std::string& text);
-void preprocessBatch(TextNeuralNetwork* nn, const std::vector<std::string>& texts, int* indices);
-void loadSentimentDataset(std::vector<std::string>& texts, std::vector<int>& labels, const std::string& filename);
-
-// Function declarations for neural network operations
+// Core neural network functions
 void initializeTextNeuralNetwork(TextNeuralNetwork* nn);
 void freeTextNeuralNetwork(TextNeuralNetwork* nn);
+
+// Forward and backward pass declaration (implemented in separate files)
 void forwardPassText(TextNeuralNetwork* nn, int* textIndices);
 void backwardPassText(TextNeuralNetwork* nn, int* textIndices, float* targets);
-void trainTextNeuralNetwork(TextNeuralNetwork* nn, const std::vector<std::string>& texts, const std::vector<int>& labels, int epochs);
+
+// Training and prediction functions
+void trainTextNeuralNetwork(TextNeuralNetwork* nn, const std::vector<std::string>& texts, 
+                         const std::vector<int>& labels, int epochs);
 void predictSentiment(TextNeuralNetwork* nn, const std::string& text, float* output);
-float calculateAccuracy(const float* predictions, const int* labels, int numSamples);
 
 #endif // TEXT_NEURAL_NETWORK_H
