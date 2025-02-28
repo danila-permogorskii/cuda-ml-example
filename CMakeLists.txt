@@ -36,8 +36,8 @@ set(CMAKE_CUDA_STANDARD 17)
 # Suppress CUDA warnings
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -diag-suppress=541")
 
-# Modern CUDA integration - no need for find_package(CUDA)
-# Instead, CMake handles CUDA through the LANGUAGES setting in project()
+# Modern CUDA integration - using CUDAToolkit
+find_package(CUDAToolkit REQUIRED)
 
 # Add debugging flag for CUDA in Debug mode
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -52,16 +52,17 @@ endif()
 # Add include directories for header files
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-# Add the executable
+# Add executables for each example
 add_executable(vector_addition src/vector_addition.cu)
+add_executable(neural_network src/neural_network.cu)
 
 # Set properties for CUDA
-set_target_properties(vector_addition PROPERTIES
-    CUDA_SEPARABLE_COMPILATION ON
-)
+set_target_properties(vector_addition PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
+set_target_properties(neural_network PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 
-# In modern CMake CUDA integration, we use CUDA::cudart instead of ${CUDA_LIBRARIES}
+# Link libraries
 target_link_libraries(vector_addition CUDA::cudart)
+target_link_libraries(neural_network CUDA::cudart CUDA::curand)
 
 # Print some information for debugging
 message(STATUS "CMAKE_CUDA_ARCHITECTURES: ${CMAKE_CUDA_ARCHITECTURES}")
