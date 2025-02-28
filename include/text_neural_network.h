@@ -25,6 +25,8 @@
 #define NUM_CLASSES 2               // Number of output classes (positive/negative)
 #define BATCH_SIZE 32               // Number of samples per batch
 #define LEARNING_RATE 0.01f         // Learning rate for gradient descent
+// Define INPUT_SIZE (need to match EMBEDDING_DIM for text neural network) 
+#define INPUT_SIZE EMBEDDING_DIM    // Size of input features
 
 // Special tokens
 #define UNK_TOKEN "<UNK>"    // Unknown word token
@@ -49,7 +51,7 @@ struct TextNeuralNetwork {
     float* d_b2;             // Device memory for biases [numClasses]
     
     // Activations for the current batch
-    float* d_text_indices;   // Device memory for word indices [batchSize x maxSequenceLength]
+    int* d_text_indices;    // Device memory for word indices [batchSize x maxSequenceLength] - FIXED: changed from float* to int*
     float* d_word_embeddings;// Device memory for word embeddings [batchSize x maxSequenceLength x embeddingDim]
     float* d_text_embedding; // Device memory for averaged text embedding [batchSize x embeddingDim]
     float* d_z1;             // Device memory for hidden layer pre-activation [batchSize x hiddenSize]
