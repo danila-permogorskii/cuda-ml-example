@@ -1,4 +1,5 @@
 #include "../include/neural_network.h"
+#include "../include/neural_network_kernels.cuh"
 #include <math.h>
 #include <curand_kernel.h>
 
